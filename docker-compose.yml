@@ -1,0 +1,31 @@
+# docker-compose.yml
+services:
+  app: &app
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    tmpfs:
+      - /tmp
+
+  runner: &backend
+    <<: *app
+    stdin_open: true
+    container_name: python-runner-dev
+    command: /bin/bash
+    tty: true
+    ports:
+      - '3001:3001'
+    volumes:
+      - .:/app:cached
+      # - node_modules:/app/node_modules
+    env_file:
+      - .env.development
+    environment:
+      - SOME_ENV=development
+
+volumes:
+  node_modules:
+
+
+
+
